@@ -24,7 +24,7 @@ for item in data:
     else:
         string = titulo
     strings.append(string)
-zsss
+
 # strings=["hola como estas", "saludos amigo mio", "adios amiga", "nos vemos luego"]
 
 client = genai.Client()
