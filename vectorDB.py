@@ -1,7 +1,12 @@
 import chromadb
 import pandas as pd
+import custEmb
+import os
 
-client = chromadb.Client()
+client = chromadb.PersistentClient(path="db")
+
+API_KEY = os.environ.get("GEMINI_API_KEY")
+# print(API_KEY)
 
 df = pd.read_csv("data.csv")
 
@@ -23,11 +28,13 @@ idList = ["n"+str(x) for x in range(len(df))]
 # print("Tipo de md:", type(md))
 # print("Ejemplo de metadatos:", metadatos.head(2) if hasattr(metadatos, 'head') else metadatos[:2])
 # print("Ejemplo de md:", md[:2] if isinstance(md, list) else md)
-collection = client.get_or_create_collection(name="noticias",  embedding_function=None)
+
+gemini_emb = custEmb.GeminiEmbeddingFunction(api_key= API_KEY)
+collection = client.get_or_create_collection(name="noticias",  embedding_function=gemini_emb)
 
 collection.upsert(
     ids= idList,
-    embeddings = embList,
+    # embeddings = embList,
     documents= documentos,
     metadatas= mdList
 )
